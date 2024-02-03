@@ -2,17 +2,57 @@
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/01/DMux8Way.hdl
+
 /**
  * 8-way demultiplexor:
- * [a, b, c, d, e, f, g, h] = [in, 0, 0, 0, 0, 0, 0, 0] if sel == 000
- *                            [0, in, 0, 0, 0, 0, 0, 0] if sel == 001
- *                            ...
- *                            [0, 0, 0, 0, 0, 0, 0, in] if sel == 111
+ * {a, b, c, d, e, f, g, h} = {i, 0, 0, 0, 0, 0, 0, 0} if sel == 000 a
+ *                            {0, i, 0, 0, 0, 0, 0, 0} if sel == 001 b
+ *                            {0, 0, i, 0, 0, 0, 0, 0} if sel == 010 c
+ *                            {0, 0, 0, i, 0, 0, 0, 0} if sel == 011 d
+ *                            {0, 0, 0, 0, i, 0, 0, 0} if sel == 100 e
+ *                            {0, 0, 0, 0, 0, i, 0, 0} if sel == 101 f
+ *                            {0, 0, 0, 0, 0, 0, i, 0} if sel == 110 g
+ *                            {0, 0, 0, 0, 0, 0, 0, i} if sel == 111 h
  */
+
 CHIP DMux8Way {
     IN in, sel[3];
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
-    //// Replace this comment with your code.
+    Not(in = sel[0], out = notSEL0);
+    Not(in = sel[1], out = notSEL1);
+    Not(in = sel[2], out = notSEL2);
+
+    And(a = notSEL0, b = notSEL1, out = lsbSELa);
+    And(a = notSEL2, b = lsbSELa, out = aSEL);
+    And(a = in, b = aSEL, out = a);
+
+    And(a = sel[0], b = notSEL1, out = lsbSELb);
+    And(a = notSEL2, b = lsbSELb, out = bSEL);
+    And(a = in, b = bSEL, out = b);
+
+    And(a = notSEL0, b = sel[1], out = lsbSELc);
+    And(a = notSEL2, b = lsbSELc, out = cSEL);
+    And(a = in, b = cSEL, out = c);
+
+    And(a = sel[0], b = sel[1], out = lsbSELd);
+    And(a = notSEL2, b = lsbSELd, out = dSEL);
+    And(a = in, b = dSEL, out = d);
+
+    And(a = notSEL0, b = notSEL1, out = lsbSELe);
+    And(a = sel[2], b = lsbSELe, out = eSEL);
+    And(a = in, b = eSEL, out = e);
+
+    And(a = sel[0], b = notSEL1, out = lsbSELf);
+    And(a = sel[2], b = lsbSELf, out = fSEL);
+    And(a = in, b = fSEL, out = f);
+
+    And(a = notSEL0, b = sel[1], out = lsbSELg);
+    And(a = sel[2], b = lsbSELg, out = gSEL);
+    And(a = in, b = gSEL, out = g);
+
+    And(a = sel[0], b = sel[1], out = lsbSELh);
+    And(a = sel[2], b = lsbSELh, out = hSEL);
+    And(a = in, b = hSEL, out = h);
 }
