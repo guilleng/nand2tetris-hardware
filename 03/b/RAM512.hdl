@@ -1,17 +1,34 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
 // File name: projects/03/b/RAM512.hdl
+
 /**
- * Memory of 512 16-bit registers.
- * If load is asserted, the value of the register selected by
- * address is set to in; Otherwise, the value does not change.
- * The value of the selected register is emitted by out.
+ * Memory of 512 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
  */
+
 CHIP RAM512 {
     IN in[16], load, address[9];
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    DMux8Way(in = load, sel = address[6..8],
+              a = ram0SEL, b = ram1SEL, c = ram2SEL, d = ram3SEL, 
+              e = ram4SEL, f = ram5SEL, g = ram6SEL, h = ram7SEL);
+
+    RAM64(in = in, load = ram0SEL, address = address[0..5], out = ram0OUT);
+    RAM64(in = in, load = ram1SEL, address = address[0..5], out = ram1OUT);
+    RAM64(in = in, load = ram2SEL, address = address[0..5], out = ram2OUT);
+    RAM64(in = in, load = ram3SEL, address = address[0..5], out = ram3OUT);
+    RAM64(in = in, load = ram4SEL, address = address[0..5], out = ram4OUT);
+    RAM64(in = in, load = ram5SEL, address = address[0..5], out = ram5OUT);
+    RAM64(in = in, load = ram6SEL, address = address[0..5], out = ram6OUT);
+    RAM64(in = in, load = ram7SEL, address = address[0..5], out = ram7OUT);
+
+    Mux8Way16(a = ram0OUT, b = ram1OUT, c = ram2OUT, d = ram3OUT,
+              e = ram4OUT, f = ram5OUT, g = ram6OUT, h = ram7OUT, 
+              sel = address[6..8], out = out);
 }

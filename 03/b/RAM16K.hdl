@@ -2,16 +2,27 @@
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/03/b/RAM16K.hdl
+
 /**
- * Memory of 16K 16-bit registers.
- * If load is asserted, the value of the register selected by
- * address is set to in; Otherwise, the value does not change.
- * The value of the selected register is emitted by out.
+ * Memory of 16K registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
  */
+
 CHIP RAM16K {
     IN in[16], load, address[14];
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    DMux4Way(in = load, sel = address[12..13],
+              a = ram0SEL, b = ram1SEL, c = ram2SEL, d = ram3SEL);
+
+    RAM4K(in = in, load = ram0SEL, address = address[0..11], out = ram0OUT);
+    RAM4K(in = in, load = ram1SEL, address = address[0..11], out = ram1OUT);
+    RAM4K(in = in, load = ram2SEL, address = address[0..11], out = ram2OUT);
+    RAM4K(in = in, load = ram3SEL, address = address[0..11], out = ram3OUT);
+
+    Mux4Way16(a = ram0OUT, b = ram1OUT, c = ram2OUT, d = ram3OUT,
+              sel = address[12..13], out = out);
 }

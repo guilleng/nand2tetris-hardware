@@ -2,16 +2,33 @@
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/03/a/RAM8.hdl
+
 /**
- * Memory of eight 16-bit registers.
- * If load is asserted, the value of the register selected by
- * address is set to in; Otherwise, the value does not change.
- * The value of the selected register is emitted by out.
+ * Memory of 8 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
  */
+
 CHIP RAM8 {
     IN in[16], load, address[3];
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    DMux8Way(in = load, sel = address,
+              a = reg0SEL, b = reg1SEL, c = reg2SEL, d = reg3SEL, 
+              e = reg4SEL, f = reg5SEL, g = reg6SEL, h = reg7SEL);
+
+    Register(in = in, load = reg0SEL, out = reg0OUT);
+    Register(in = in, load = reg1SEL, out = reg1OUT);
+    Register(in = in, load = reg2SEL, out = reg2OUT);
+    Register(in = in, load = reg3SEL, out = reg3OUT);
+    Register(in = in, load = reg4SEL, out = reg4OUT);
+    Register(in = in, load = reg5SEL, out = reg5OUT);
+    Register(in = in, load = reg6SEL, out = reg6OUT);
+    Register(in = in, load = reg7SEL, out = reg7OUT);
+
+    Mux8Way16(a = reg0OUT, b = reg1OUT, c = reg2OUT, d = reg3OUT,
+              e = reg4OUT, f = reg5OUT, g = reg6OUT, h = reg7OUT, 
+              sel = address, out = out);
 }
