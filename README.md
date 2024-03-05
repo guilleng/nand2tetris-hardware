@@ -1,7 +1,7 @@
 Nand2Tetris Part One
 ====================
 
-Keeping track as I work through the projects of the 
+Keeping track as I work through the hardware projects of the 
 [NandToTetris](https://www.nand2tetris.org/) course:
 
 + Project 1: Boolean Logic
@@ -9,7 +9,6 @@ Keeping track as I work through the projects of the
 + Project 3: Sequential Logic
 + Project 4: Machine Language
 + Project 5: Computer Architecture
-+ Project 6: Assembler
 
 I expect this repo to provide guidance and facilitate comparison to other 
 learners out there. 
