@@ -1,4 +1,4 @@
-Nand2Tetris Part One
+Nand2Tetris Hardware
 ====================
 
 Keeping track as I work through the hardware projects of the 
